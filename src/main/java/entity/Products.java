@@ -1,5 +1,6 @@
 package entity;
 
+import instancesOfDB.Order;
 import instancesOfDB.Product;
 
 import java.sql.*;
@@ -31,6 +32,14 @@ public class Products implements DbService {
 
     @Override
     public void getAllObjects() throws SQLException {
+        String column;
+        String name = "";
+        double price = 0.0;
+        int amount=0;
+
+        ListsFromDB listsFromDB = new ListsFromDB();
+        listsFromDB.getListsFromDB();
+
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM products");
 
         try {
@@ -38,15 +47,21 @@ public class Products implements DbService {
             try {
                 ResultSetMetaData md = rs.getMetaData();
 
-                for (int i = 1; i <= md.getColumnCount(); i++)
-                    System.out.print(md.getColumnName(i) + "\t\t");
-                System.out.println();
-
                 while (rs.next()) {
                     for (int i = 1; i <= md.getColumnCount(); i++) {
-                        System.out.print(rs.getString(i) + "\t\t");
+                        column = md.getColumnName(i);
+
+                        if ("name".equals(column))
+                            name = rs.getString(i);
+
+                        if ("price".equals(column))
+                            price = rs.getDouble(i);
+
+                        if ("amount".equals(column))
+                            amount = rs.getInt(i);
+
                     }
-                    System.out.println();
+                    listsFromDB.addProduct(new Product(name, price, amount));
                 }
             } finally {
                 rs.close();
