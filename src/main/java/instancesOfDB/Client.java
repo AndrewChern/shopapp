@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Client {
 
+    private  int id; //for lists from DB
     private String name;
     private String secondName;
     private int phoneNumber;
@@ -15,6 +16,18 @@ public class Client {
         this.name = name;
         this.secondName = secondName;
         this.phoneNumber = phoneNumber;
+    }
+
+    // constructor for lists from DB
+    public Client(int id, String name, String secondName, int phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.secondName = secondName;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

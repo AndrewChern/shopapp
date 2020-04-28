@@ -21,8 +21,8 @@ public class Orders implements DbService{
         try {
             st.execute("DROP TABLE IF EXISTS orders");
             st.execute("CREATE TABLE orders (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "productUniqueCode INT NOT NULL," +
-                    "clientID INT NOT NULL," +
+                    "clientID FOREIGN KEY(idClient) REFERENCES clients(id)," +
+                    "productID FOREIGN KEY(idProduct) REFERENCES products(id)," +
                     "totalPrice DOUBLE DEFAULT NULL," +
                     "totalAmount INT DEFAULT NULL," +
                     "orderDate VARCHAR(100) NOT NULL)");
@@ -33,6 +33,16 @@ public class Orders implements DbService{
 
     @Override
     public void getAllObjects() throws SQLException {
+
+        String column;
+        int clientID=0;
+        int productID=0;
+        double totalPrice = 0.0;
+        int totalAmount=0;
+        String orderDate = "";
+        ListsFromDB listsFromDB = new ListsFromDB();
+        listsFromDB.getListsFromDB();
+
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM orders");
 
         try {
@@ -40,15 +50,26 @@ public class Orders implements DbService{
             try {
                 ResultSetMetaData md = rs.getMetaData();
 
-                for (int i = 1; i <= md.getColumnCount(); i++)
-                    System.out.print(md.getColumnName(i) + "\t\t");
-                System.out.println();
-
                 while (rs.next()) {
                     for (int i = 1; i <= md.getColumnCount(); i++) {
-                        System.out.print(rs.getString(i) + "\t\t");
+                        column = md.getColumnName(i);
+
+                        if ("clientID".equals(column))
+                            clientID = rs.getInt(i);
+
+                        if ("productID".equals(column))
+                            productID = rs.getInt(i);
+
+                        if ("totalPrice".equals(column))
+                            totalPrice = rs.getDouble(i);
+
+                        if ("totalAmount".equals(column))
+                            totalAmount = rs.getInt(i);
+
+                        if ("orderDate".equals(column))
+                            orderDate = rs.getString(i);
                     }
-                    System.out.println();
+                    listsFromDB.addOrder(new Order(clientID, productID, totalPrice, totalAmount, orderDate));
                 }
             } finally {
                 rs.close();

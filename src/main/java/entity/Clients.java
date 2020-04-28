@@ -31,6 +31,15 @@ public class Clients implements DbService{
 
     @Override
     public void getAllObjects() throws SQLException {
+
+        String column;
+        int id=0;
+        String name = "";
+        String secondName = "";
+        int phoneNumber=0;
+        ListsFromDB listsFromDB = new ListsFromDB();
+        listsFromDB.getListsFromDB();
+
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM clients");
 
         try {
@@ -38,15 +47,23 @@ public class Clients implements DbService{
             try {
                 ResultSetMetaData md = rs.getMetaData();
 
-                for (int i = 1; i <= md.getColumnCount(); i++)
-                    System.out.print(md.getColumnName(i) + "\t\t");
-                System.out.println();
-
                 while (rs.next()) {
                     for (int i = 1; i <= md.getColumnCount(); i++) {
-                        System.out.print(rs.getString(i) + "\t\t");
+                        column = md.getColumnName(i);
+
+                        if ("id".equals(column))
+                            id = rs.getInt(i);
+
+                        if ("name".equals(column))
+                            name = rs.getString(i);
+
+                        if ("secondName".equals(column))
+                            secondName = rs.getString(i);
+
+                        if ("phoneNumber".equals(column))
+                            phoneNumber = rs.getInt(i);
                     }
-                    System.out.println();
+                    listsFromDB.addClient(new Client(id, name, secondName, phoneNumber));
                 }
             } finally {
                 rs.close();

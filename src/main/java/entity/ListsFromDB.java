@@ -12,12 +12,12 @@ public class ListsFromDB {
     private ArrayList<Product> productList = new ArrayList<>();
     private ArrayList<Order> orderList = new ArrayList<>();
 
-    private static  ListsFromDB listsFromDB = new ListsFromDB();
+    private static ListsFromDB listsFromDB = new ListsFromDB();
 
     public ListsFromDB() {
     }
 
-    public static ListsFromDB getListsFromDB() {
+    public ListsFromDB getListsFromDB() {
         return listsFromDB;
     }
 
