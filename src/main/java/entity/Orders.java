@@ -22,7 +22,7 @@ public class Orders implements DbService{
             st.execute("DROP TABLE IF EXISTS orders");
             st.execute("CREATE TABLE orders (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "clientID FOREIGN KEY(idClient) REFERENCES clients(id)," +
-                    "productID FOREIGN KEY(idProduct) REFERENCES products(id)," +
+                    "productID FOREIGN KEY(idProduct) REFERENCES products(code)," +
                     "totalPrice DOUBLE DEFAULT NULL," +
                     "totalAmount INT DEFAULT NULL," +
                     "orderDate VARCHAR(100) NOT NULL)");
@@ -80,10 +80,10 @@ public class Orders implements DbService{
     }
 
     public void addObject(Order order) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO products (productUniqueCode, clientID, totalPrice, totalAmount, orderDate) VALUES(?, ?, ?, ?, ?)");
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO orders (clientID, productID, totalPrice, totalAmount, orderDate) VALUES(?, ?, ?, ?, ?)");
         try {
-            ps.setInt(1, order.getProductID());
-            ps.setInt(2, order.getClientID());
+            ps.setInt(1, order.getClientID());
+            ps.setInt(2, order.getProductID());
             ps.setDouble(3, order.getTotalPrice());
             ps.setInt(4, order.getTotalAmount());
             ps.setString(4, order.toString());

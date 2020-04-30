@@ -11,10 +11,9 @@
 <table border="1">
     <c:forEach items="${productList}" var="prod">
         <tr>
-            <td><c:out value="${prod.code}"/></td>
             <td><c:out value="${prod.name}"/></td>
-            <td><c:out value="${prod.count}"/></td>
             <td><c:out value="${prod.price}"/></td>
+            <td><c:out value="${prod.amount}"/></td>
         </tr>
     </c:forEach>
 </table>
@@ -22,8 +21,8 @@
 <form action="/addOrder" method="POST">
     <p><select name= "idPerson">
         <option > Select client</option>
-        <c:forEach items="${clientList}" var="person">
-            <option value="${person.id}" > ${person.name} </option>
+        <c:forEach items="${clientList}" var="client">
+            <option value="${client.id}" > ${client.name} </option>
         </c:forEach>
     </select></p>
 

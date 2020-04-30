@@ -20,6 +20,7 @@ public class AddProductServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int code = Integer.parseInt(req.getParameter("code"));
         String name = req.getParameter("name");
         double price = Double.parseDouble(req.getParameter("price"));
         int amount = Integer.parseInt(req.getParameter("amount"));

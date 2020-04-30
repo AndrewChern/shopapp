@@ -21,7 +21,7 @@ public class Products implements DbService {
 
         try {
             st.execute("DROP TABLE IF EXISTS products");
-            st.execute("CREATE TABLE products (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+            st.execute("CREATE TABLE products (code INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(100) NOT NULL," +
                     "price DOUBLE DEFAULT NULL," +
                     "amount INT DEFAULT NULL)");
@@ -33,6 +33,7 @@ public class Products implements DbService {
     @Override
     public void getAllObjects() throws SQLException {
         String column;
+        int code = 0;
         String name = "";
         double price = 0.0;
         int amount=0;
@@ -51,6 +52,9 @@ public class Products implements DbService {
                     for (int i = 1; i <= md.getColumnCount(); i++) {
                         column = md.getColumnName(i);
 
+                        if ("code".equals(column))
+                            code = rs.getInt(i);
+
                         if ("name".equals(column))
                             name = rs.getString(i);
 
@@ -61,7 +65,7 @@ public class Products implements DbService {
                             amount = rs.getInt(i);
 
                     }
-                    listsFromDB.addProduct(new Product(name, price, amount));
+                    listsFromDB.addProduct(new Product(code, name, price, amount));
                 }
             } finally {
                 rs.close();
@@ -72,11 +76,12 @@ public class Products implements DbService {
     }
 
     public void addObject(Product product, int amount) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO products (name, price, amount) VALUES(?, ?, ?)");
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO products (code, name, price, amount) VALUES(?, ?, ?, ?)");
         try {
-            ps.setString(1, product.getName());
-            ps.setDouble(2, product.getPrice());
-            ps.setInt(3, amount);
+            ps.setInt(1, product.getCode());
+            ps.setString(2, product.getName());
+            ps.setDouble(3, product.getPrice());
+            ps.setInt(4, amount);
 
             ps.executeUpdate();
         } finally {
