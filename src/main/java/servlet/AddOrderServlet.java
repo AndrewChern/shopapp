@@ -70,6 +70,6 @@ public class AddOrderServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        resp.sendRedirect("addOrder.html");
+        resp.sendRedirect("adminPanel.html");
     }
 }
